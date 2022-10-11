@@ -18,17 +18,17 @@ function MessageCreator({ contact }: { contact?: IContact }) {
 	const [inputValue, setInputValue] = useState<string>("");
 	const { setContacts, contacts } = useContext(ChatContext);
 
-	const updateContactMessages = (message: IMessage) => {
-		const newContacts = [...contacts].map((c) => {
-			if (c.id === contact?.id) {
-				const copyContact = { ...c };
-				copyContact.messages.push(message);
-				return copyContact;
-			}
-			return c;
-		});
-		setContacts(newContacts);
-	};
+	const updateContactMessages = (message: IMessage) =>
+		setContacts((prev) =>
+			prev.map((c) => {
+				if (c.id === contact?.id) {
+					const copyContact = { ...c };
+					copyContact.messages = [...c.messages, message];
+					return copyContact;
+				}
+				return c;
+			}),
+		);
 
 	const delay = (ms: number) =>
 		new Promise((resolve) => setTimeout(resolve, ms));
